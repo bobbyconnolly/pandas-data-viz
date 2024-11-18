@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                line-height: 1.6;
+                max-width: 100%; 
+                margin: 0 auto;
+                padding: 20px;
+                background: #f5f5f5;
+            }
+            .container {
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                max-width: 800px;  
+                margin: 0 auto;    
+                width: 90%;        
+            }
+            .panda-logo {
+                max-width: 100%;
+                height: auto;
+            }
+            pre {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            code {
+                font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            }
+            .py-str { color: #098658; }
+            .py-num { color: #098658; }
+            .py-key { color: #0000ff; }
+            .py-com { color: #808080; }
+            .py-op { color: #000000; }
+            .py-var { color: #267f99; }
+            .note {
+                background: #e7f3fe;
+                border-left: 6px solid #2196F3;
+                padding: 15px;
+                margin: 10px 0;
+            }
+            .concept-note {
+                background: #fff3e0;
+                border-left: 6px solid #ff9800;
+                padding: 15px;
+                margin: 10px 0;
+            }
+            .warning {
+                background: #ffebee;
+                border-left: 6px solid #f44336;
+                padding: 15px;
+                margin: 10px 0;
+            }
+            .gold {
+                background: #fff8e1;
+                border-left: 6px solid #ffd700;
+                padding: 15px;
+                margin: 10px 0;
+            }
+            .exercise {
+                background: #f8f4e5;
+                border-left: 6px solid #ffa726;
+                padding: 15px;
+                margin: 10px 0;
+            }
+            @media (max-width: 600px) {
+                body {
+                    padding: 10px;
+                    background: white;
+                }
+                .container {
+                    background: white;
+                    width: 100%;    
+                    max-width: 100%;
+                    margin: 0;
+                    padding: 0; 
+                    box-shadow: none;
+                }
+            }
+        </style>
+    </head>
+<body>
+<div class="container">
+    <h1>Data Visualization with Pandas and Matplotlib</h1>
+    
+    <h2>Setup</h2>
+    <p>First, let's import our libraries and create some sample data:</p>
+    
+    <pre><code><span class="py-key">import</span> <span class="py-var">pandas</span> <span class="py-key">as</span> <span class="py-var">pd</span>
+<span class="py-key">import</span> <span class="py-var">matplotlib.pyplot</span> <span class="py-key">as</span> <span class="py-var">plt</span>
+
+<span class="py-com"># Sample sales data</span>
+data = {
+    <span class="py-str">'date'</span>: pd.date_range(<span class="py-str">'2024-01-01'</span>, periods=<span class="py-num">6</span>, freq=<span class="py-str">'M'</span>),
+    <span class="py-str">'product'</span>: [<span class="py-str">'Laptop'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Tablet'</span>, <span class="py-str">'Watch'</span>, <span class="py-str">'Headphones'</span>, <span class="py-str">'Laptop'</span>],
+    <span class="py-str">'sales'</span>: [<span class="py-num">5</span>, <span class="py-num">15</span>, <span class="py-num">10</span>, <span class="py-num">20</span>, <span class="py-num">25</span>, <span class="py-num">8</span>],
+    <span class="py-str">'revenue'</span>: [<span class="py-num">4995</span>, <span class="py-num">10485</span>, <span class="py-num">4990</span>, <span class="py-num">5980</span>, <span class="py-num">3975</span>, <span class="py-num">7992</span>]
+}
+df = pd.DataFrame(data)
+
+<span class="py-com"># Enable inline plotting in Jupyter</span>
+%matplotlib inline
+
+<span class="py-com"># Set style for better-looking graphs</span>
+plt.style.use(<span class="py-str">'seaborn'</span>)</code></pre>
+
+    <h2>Basic Plotting</h2>
+    <p>Let's start with simple plots using pandas' built-in plotting:</p>
+
+    <pre><code><span class="py-com"># Line plot of sales over time</span>
+df.plot(x=<span class="py-str">'date'</span>, y=<span class="py-str">'sales'</span>, figsize=(<span class="py-num">10</span>, <span class="py-num">6</span>))
+plt.title(<span class="py-str">'Sales Over Time'</span>)
+plt.xlabel(<span class="py-str">'Date'</span>)
+plt.ylabel(<span class="py-str">'Units Sold'</span>)
+plt.savefig(<span class="py-str">'sales_trend.png'</span>)
+plt.close()
+
+<span class="py-com"># Bar plot of sales by product</span>
+product_sales = df.groupby(<span class="py-str">'product'</span>)[<span class="py-str">'sales'</span>].sum()
+product_sales.plot(kind=<span class="py-str">'bar'</span>, figsize=(<span class="py-num">10</span>, <span class="py-num">6</span>))
+plt.title(<span class="py-str">'Total Sales by Product'</span>)
+plt.xticks(rotation=<span class="py-num">45</span>)
+plt.tight_layout()
+plt.savefig(<span class="py-str">'product_sales.png'</span>)
+plt.close()</code></pre>
+
+    <h2>Advanced Visualization</h2>
+    <p>Creating more complex visualizations:</p>
+
+    <pre><code><span class="py-com"># Multiple lines on same plot</span>
+fig, ax = plt.subplots(figsize=(<span class="py-num">12</span>, <span class="py-num">6</span>))
+df.plot(x=<span class="py-str">'date'</span>, y=<span class="py-str">'sales'</span>, label=<span class="py-str">'Units'</span>, ax=ax)
+df.plot(x=<span class="py-str">'date'</span>, y=<span class="py-str">'revenue'</span>, label=<span class="py-str">'Revenue'</span>, ax=ax, secondary_y=<span class="py-key">True</span>)
+ax.set_title(<span class="py-str">'Sales and Revenue Over Time'</span>)
+plt.tight_layout()
+plt.savefig(<span class="py-str">'sales_revenue.png'</span>)
+plt.close()
+
+<span class="py-com"># Subplots</span>
+fig, (ax1, ax2) = plt.subplots(<span class="py-num">1</span>, <span class="py-num">2</span>, figsize=(<span class="py-num">15</span>, <span class="py-num">5</span>))
+
+<span class="py-com"># Pie chart</span>
+product_sales.plot(kind=<span class="py-str">'pie'</span>, ax=ax1, autopct=<span class="py-str">'%1.1f%%'</span>)
+ax1.set_title(<span class="py-str">'Sales Distribution'</span>)
+
+<span class="py-com"># Bar chart</span>
+product_sales.plot(kind=<span class="py-str">'bar'</span>, ax=ax2)
+ax2.set_title(<span class="py-str">'Sales by Product'</span>)
+ax2.tick_params(axis=<span class="py-str">'x'</span>, rotation=<span class="py-num">45</span>)
+
+plt.tight_layout()
+plt.savefig(<span class="py-str">'sales_analysis.png'</span>)
+plt.close()</code></pre>
+
+    <h2>Customizing Plots</h2>
+    <p>Making plots more professional:</p>
+
+    <pre><code><span class="py-com"># Create a styled bar chart</span>
+plt.figure(figsize=(<span class="py-num">12</span>, <span class="py-num">6</span>))
+bars = plt.bar(product_sales.index, product_sales.values)
+
+<span class="py-com"># Add value labels on top of each bar</span>
+<span class="py-key">for</span> bar <span class="py-key">in</span> bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/<span class="py-num">2</span>, height,
+             f<span class="py-str">'{height:,.0f}'</span>,
+             ha=<span class="py-str">'center'</span>, va=<span class="py-str">'bottom'</span>)
+
+plt.title(<span class="py-str">'Product Sales Analysis'</span>, pad=<span class="py-num">20</span>, size=<span class="py-num">14</span>)
+plt.xlabel(<span class="py-str">'Product Category'</span>, labelpad=<span class="py-num">10</span>)
+plt.ylabel(<span class="py-str">'Units Sold'</span>, labelpad=<span class="py-num">10</span>)
+plt.grid(axis=<span class="py-str">'y'</span>, linestyle=<span class="py-str">'--'</span>, alpha=<span class="py-num">0.7</span>)
+plt.xticks(rotation=<span class="py-num">45</span>)
+
+<span class="py-com"># Add a subtitle</span>
+plt.text(<span class="py-num">0</span>, plt.ylim()[<span class="py-num">1</span>], <span class="py-str">'Sales Distribution Across Products'</span>,
+         fontsize=<span class="py-num">10</span>, alpha=<span class="py-num">0.75</span>)
+
+plt.tight_layout()
+plt.savefig(<span class="py-str">'styled_sales.png'</span>, dpi=<span class="py-num">300</span>, bbox_inches=<span class="py-str">'tight'</span>)
+plt.close()</code></pre>
+
+    <div class="note">
+        <strong>Important:</strong> Always call plt.close() after saving figures to free up memory, especially in notebooks!
+    </div>
+
+    <h2>Exercises</h2>
+    <div class="exercise">
+        <strong>Exercise 1:</strong> Basic Plotting
+        <ul>
+            <li>Create a line plot showing revenue over time</li>
+            <li>Add appropriate labels and title</li>
+            <li>Save it as 'revenue_trend.png'</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 2:</strong> Multiple Visualizations
+        <ul>
+            <li>Create a figure with three subplots:
+                <ul>
+                    <li>Line plot of sales over time</li>
+                    <li>Bar plot of revenue by product</li>
+                    <li>Pie chart of sales distribution</li>
+                </ul>
+            </li>
+            <li>Add a main title for the entire figure</li>
+            <li>Save as 'sales_dashboard.png'</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 3:</strong> Advanced Customization
+        <ul>
+            <li>Create a horizontal bar chart of revenue by product</li>
+            <li>Add value labels at the end of each bar</li>
+            <li>Add a color gradient to the bars</li>
+            <li>Include a grid for better readability</li>
+            <li>Save in high resolution (300 dpi)</li>
+        </ul>
+    </div>
+
+    <h2>Common Patterns for Reports</h2>
+    <pre><code><span class="py-com"># Function to create standardized plots</span>
+<span class="py-key">def</span> <span class="py-var">create_sales_report</span>(df, output_dir=<span class="py-str">'reports'</span>):
+    <span class="py-key">import</span> <span class="py-var">os</span>
+    os.makedirs(output_dir, exist_ok=<span class="py-key">True</span>)
+    
+    <span class="py-com"># Create all visualizations</span>
+    plots = [
+        {<span class="py-str">'func'</span>: create_sales_trend,
+         <span class="py-str">'filename'</span>: <span class="py-str">'sales_trend.png'</span>},
+        {<span class="py-str">'func'</span>: create_product_analysis,
+         <span class="py-str">'filename'</span>: <span class="py-str">'product_analysis.png'</span>},
+        {<span class="py-str">'func'</span>: create_revenue_summary,
+         <span class="py-str">'filename'</span>: <span class="py-str">'revenue_summary.png'</span>}
+    ]
+    
+    <span class="py-key">for</span> plot <span class="py-key">in</span> plots:
+        fig = plot[<span class="py-str">'func'</span>](df)
+        path = os.path.join(output_dir, plot[<span class="py-str">'filename'</span>])
+        fig.savefig(path, dpi=<span class="py-num">300</span>, bbox_inches=<span class="py-str">'tight'</span>)
+        plt.close(fig)</code></pre>
+
+    <div class="note">
+        <strong>Best Practices:</strong>
+        <ul>
+            <li>Use consistent styling across all plots in a report</li>
+            <li>Save high-resolution images (300 dpi or higher)</li>
+            <li>Use meaningful filenames</li>
+            <li>Organize outputs in a dedicated directory</li>
+            <li>Include clear titles and labels</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
